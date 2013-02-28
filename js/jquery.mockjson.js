@@ -273,7 +273,8 @@ $.mockJSON.generateFromTemplate = function(template, name, mock) {
             generated = {};
             for (p in template) {
                 if (template.hasOwnProperty(p)) {
-                    generated[p.replace(/\|(\d+-\d+|\+\d+)/, '')] = $.mockJSON.generateFromTemplate(template[p], p, mock);
+                    // Corrected replace bug for single integer passed as argument
+                    generated[p.replace(/\|(\d+(-\d+)?|\+\d+)/, '')] = $.mockJSON.generateFromTemplate(template[p], p, mock);
                     inc_matches = p.match(/\w+\|\+(\d+)/);
                     if (inc_matches && type(template[p]) === 'number') {
                         increment = parseInt(inc_matches[1], 10);
