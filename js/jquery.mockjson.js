@@ -200,6 +200,14 @@ $.mockJSON.data = {
               return url_match[index];
           }
           return null;
+    },
+    POST_VARS: function() {
+          // For POST variables, the parameter should be the name of the variable
+          var param = Array.prototype.slice.call(arguments[0], 0).shift().toString();
+          var post_vars = arguments[1].special.POST_VARS;
+          if ( typeof post_vars[param] !== 'undefined' ) {
+              return post_vars[param];
+          }
     }
 };
 
@@ -231,7 +239,8 @@ $.ajax = function(url, options) {
                 // * QUERY_STRING: query string parameters in the URL
                 mock.special = {
                     URL_MATCH: options.url.match(mock.request),
-                    QUERY_STRING: parseQueryString(options.url)
+                    QUERY_STRING: parseQueryString(options.url),
+                    POST_VARS: options.type.toString().toUpperCase() === 'POST' ? options.data : {}
                 };
                 resp = $.mockJSON.generateFromTemplate(mock.template, null, mock);
 
